@@ -1,0 +1,37 @@
+import Signup from '../components/Signup'
+export default function Signuppage(){
+    return(
+        <>
+            <div className ="flex justify-center h-screen">
+                <div className = "p-20 w-1/2 bg-[#d9ceb4] whitespace-pre">
+                    <div className = "pb-10 font-light">P R O S E   /   J O I N</div>
+                    <div>
+                        <div className ="pt-2 text-black text-6xl font-bold">Start</div>
+                        <div className ="pt-2 text-[#c8622a] text-6xl">telling</div>
+                        <div className ="pt-2 text-black text-6xl font-bold">your story</div>
+                    </div>
+                    <div className = "pt-30 text-gray-600">
+                        <div className ="pb-10 flex items-center ">
+                            <div className = "h-2 w-2 m-1 bg-red-700 rounded-full flex justify-center flex-col"></div>
+                            <div>Publish to a thoughtful audience</div>
+                        </div>
+                        
+                        <div className ="pb-10 flex items-center ">
+                            <div className = "h-2 w-2 m-1 bg-red-700 rounded-full"></div>
+                            <div>Clean, distraction-free editor</div>
+                        </div>
+                        
+                        <div className ="pb-10 flex items-center ">
+                            <div className = "h-2 w-2 m-1 bg-red-700 rounded-full"></div>
+                            <div>Analytics that respect privacy</div>
+                        </div>
+
+                    </div>
+                </div>
+                <div className = "flex justify-center flex-col items-center bg-[#f8f6f1] w-1/2">
+                    <Signup></Signup>
+                </div>
+            </div>
+        </>
+    )
+}
