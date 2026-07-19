@@ -1,7 +1,7 @@
 import {Hono} from 'hono'
-import {PrismaClient} from './generated/prisma/client'
+import {PrismaClient} from './generated/prisma/client.js'
 import {PrismaPg} from '@prisma/adapter-pg'
-import {serve} from '@hono/node-server'
+// import {serve} from '@hono/node-server'
 import 'dotenv/config';
 import bcrypt from "bcryptjs"
 import {sign,decode, verify} from 'hono/jwt'
@@ -173,8 +173,8 @@ app.get('/app/v1/blogs',async(c)=>{
 
     
 })
-serve({
-    fetch:app.fetch,
-    port: 3000
-})
+// serve({
+//     fetch:app.fetch,
+//     port: 3000
+// })
 export default app
