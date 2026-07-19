@@ -1,7 +1,7 @@
 export function Signup(){
         return(
             <>
-                <div className = " h-screen ">
+                <div className = "md: h-screen ">
                     <div className = "p-10 text-3xl font-semibold ">Create Your Account</div>
                     <div>
                         <div className = "p-5 text-lg font-semibold ">

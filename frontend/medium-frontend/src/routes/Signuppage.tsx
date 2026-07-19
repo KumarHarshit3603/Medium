@@ -2,8 +2,8 @@ import Signup from '../components/Signup'
 export default function Signuppage(){
     return(
         <>
-            <div className ="flex justify-center h-screen">
-                <div className = "p-20 w-1/2 bg-[#d9ceb4] whitespace-pre">
+            <div className =" md:flex justify-center ">
+                <div className = " md:w-1/2 p-20  bg-[#d9ceb4] whitespace-pre">
                     <div className = "pb-10 font-light">P R O S E   /   J O I N</div>
                     <div>
                         <div className ="pt-2 text-black text-6xl font-bold">Start</div>
@@ -28,7 +28,7 @@ export default function Signuppage(){
 
                     </div>
                 </div>
-                <div className = "flex justify-center flex-col items-center bg-[#f8f6f1] w-1/2">
+                <div className = "flex justify-center flex-col items-center bg-[#f8f6f1] md:w-1/2">
                     <Signup></Signup>
                 </div>
             </div>
