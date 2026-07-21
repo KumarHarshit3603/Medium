@@ -18,7 +18,7 @@ const app = new Hono<{
     }
 }>();
 
-app.use('*',cors({
+app.use('/app/v1/*',cors({
     origin:"http://localhost:5173",
 }))
 app.use('*',async(c,next)=>{
