@@ -2,12 +2,12 @@ import Signup from '../components/Signup'
 export default function Signuppage(){
     return(
         <>
-            <div className =" md:flex justify-center ">
-                <div className = " md:w-1/2 p-20  bg-[#d9ceb4] whitespace-pre">
+            <div className =" flex justify-around h-screen">
+                <div className = "min-w-lg w-1/2 p-20 hidden lg:block    bg-[#d9ceb4] whitespace-pre">
                     <div className = "pb-10 font-light">P R O S E   /   J O I N</div>
                     <div>
                         <div className ="pt-2 text-black text-6xl font-bold">Start</div>
-                        <div className ="pt-2 text-[#c8622a] text-6xl">telling</div>
+                        <div className ="pt-2 text-[rgb(200,98,42)] text-6xl">telling</div>
                         <div className ="pt-2 text-black text-6xl font-bold">your story</div>
                     </div>
                     <div className = "pt-30 text-gray-600">
@@ -28,7 +28,7 @@ export default function Signuppage(){
 
                     </div>
                 </div>
-                <div className = "flex justify-center flex-col items-center bg-[#f8f6f1] md:w-1/2">
+                <div className = "min-w-lg  w-screen   lg:w-1/2 flex justify-center flex-col items-center bg-[#f8f6f1] ">
                     <Signup></Signup>
                 </div>
             </div>

@@ -6,7 +6,7 @@ import 'dotenv/config';
 import bcrypt from "bcryptjs"
 import {sign,decode, verify} from 'hono/jwt'
 import {signupschema,signinschema} from './validation'
-
+import {cors} from 'hono/cors'
 
 const app = new Hono<{
     Bindings:{
@@ -18,6 +18,9 @@ const app = new Hono<{
     }
 }>();
 
+app.use('*',cors({
+    origin:"http://localhost:5173",
+}))
 app.use('*',async(c,next)=>{
     const adapter = new PrismaPg({
         connectionString: process.env.DATABASE_URL
