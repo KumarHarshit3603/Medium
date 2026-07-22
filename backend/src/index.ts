@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs"
 import {sign,decode, verify} from 'hono/jwt'
 import {signupschema,signinschema} from './validation'
 import {cors} from 'hono/cors'
+import {handle} from 'hono/vercel' 
 
 const app = new Hono<{
     Bindings:{
@@ -18,9 +19,14 @@ const app = new Hono<{
     }
 }>();
 
-app.use('/app/v1/*',cors({
-    origin:"http://localhost:5173",
-}))
+app.use(
+  '*',
+  cors({
+    origin: (origin) => origin || '*',
+    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+  })
+)
 app.use('*',async(c,next)=>{
     const adapter = new PrismaPg({
         connectionString: process.env.DATABASE_URL
@@ -180,4 +186,4 @@ app.get('/app/v1/blogs',async(c)=>{
 //     fetch:app.fetch,
 //     port: 3000
 // })
-export default app
+export default handle(app)
