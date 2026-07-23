@@ -5,7 +5,7 @@ export default function Signinpage(){
 
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
-
+    console.log(token);
     useEffect(()=>{
 
             if(token){

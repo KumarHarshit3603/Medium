@@ -644,7 +644,7 @@ var serve = (options, listeningListener) => {
 // src/index.ts
 import "dotenv/config";
 import bcrypt from "bcryptjs";
-import { sign } from "hono/jwt";
+import { sign, verify } from "hono/jwt";
 
 // src/validation.ts
 import { z } from "zod";
@@ -665,6 +665,31 @@ var signinschema = z.object({
 import { cors } from "hono/cors";
 import "hono/vercel";
 var app = new Hono();
+async function authenticate(c, next) {
+  const auth_header = c.req.header("Authorization");
+  if (!auth_header) {
+    return c.json({ message: "Authorization header missing" }, 401);
+  }
+  const arr = auth_header.split(" ");
+  if (arr.length < 2) return c.json({
+    "value": true
+  });
+  const token = auth_header.split(" ")[1];
+  try {
+    const check = await verify(token, process.env.JWT_SECRET, "HS256");
+    if (check) {
+      await next();
+    } else {
+      return c.json({
+        "value": true
+      });
+    }
+  } catch (e) {
+    return c.json({
+      "value": true
+    });
+  }
+}
 app.use(
   "*",
   cors({
@@ -680,6 +705,24 @@ app.use("*", async (c, next) => {
   const prisma = new PrismaClient({ adapter });
   c.set("prisma", prisma);
   await next();
+});
+app.get("/auth", async (c) => {
+  const auth_string = c.req.header("Authorization");
+  if (!auth_string) {
+    return c.json({ "value": false });
+  }
+  try {
+    const arr = auth_string.split(" ");
+    if (arr.length < 2) {
+      return c.json({ "value": false });
+    }
+    const token = arr[1];
+    const valid = await verify(token, process.env.JWT_SECRET, "HS256");
+    if (valid) return c.json({ "value": true });
+    else return c.json({ "value": false });
+  } catch (e) {
+    return c.json({ "value": false });
+  }
 });
 app.post("/app/v1/signup", async (c) => {
   const prisma = c.get("prisma");
@@ -699,7 +742,7 @@ app.post("/app/v1/signup", async (c) => {
         password: await bcrypt.hash(userdata.password, 10)
       }
     });
-    const token = await sign(userdata, process.env.JWT_SECRET || "");
+    const token = await sign(userdata, process.env.JWT_SECRET || "", "HS256");
     return c.json({
       message: "successfully signed up",
       token
@@ -727,6 +770,7 @@ app.post("/app/v1/signin", async (c) => {
         username: userdata.username
       }
     });
+    console.log(result);
     if (result) {
       const founduser = {
         name: result.name,
@@ -734,23 +778,26 @@ app.post("/app/v1/signin", async (c) => {
         email: result.email,
         password: result.password
       };
+      console.log(founduser.password, userdata.password);
       const isMatch = await bcrypt.compare(userdata.password, founduser.password);
       if (!isMatch) {
         return c.text("wrong password");
       }
-      const token = await sign(userdata, process.env.JWT_SECRET || "");
+      const token = await sign(userdata, process.env.JWT_SECRET || "", "HS256");
       return c.json({
         message: "successfully signed in",
         token
       });
     } else {
       return c.json({
-        message: "kuch hua"
+        message: "no user with this username"
       });
     }
   } catch (e) {
     c.status(403);
-    return c.text("some error happened");
+    return c.json({
+      message: "some error"
+    });
   }
 });
 app.post("/app/v1/blog", async (c) => {
@@ -792,7 +839,7 @@ app.put("/app/v1/blog", async (c) => {
     return c.json({ message: "error" });
   }
 });
-app.get("/app/v1/blogs", async (c) => {
+app.get("/app/v1/blogs", authenticate, async (c) => {
   const prisma = c.get("prisma");
   try {
     const userdata = await prisma.blogs.findMany({});

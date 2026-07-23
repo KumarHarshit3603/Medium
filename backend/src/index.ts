@@ -20,6 +20,10 @@ const app = new Hono<{
 }>();
 async function authenticate(c:any,next:any){
     const auth_header = c.req.header("Authorization");
+    if (!auth_header) {
+    return c.json({ message: "Authorization header missing" }, 401);
+    }
+
     const arr = auth_header.split(" ");
     if(arr.length<2)return c.json({
                 "value" : true

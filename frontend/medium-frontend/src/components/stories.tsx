@@ -2,7 +2,7 @@ import {useState , useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import Card from './card'
 export default function Stories(){
-    
+    const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
         type Blog = {
@@ -29,7 +29,11 @@ export default function Stories(){
     }
     
     async function getblogs(){
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/app/v1/blogs`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/app/v1/blogs`,{
+            headers:{
+                            Authorization: `Bearer ${token}` 
+                        }
+        });
         const blogs = await res.json();
         
         if(blogs.value){
