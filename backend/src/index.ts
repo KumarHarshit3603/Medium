@@ -1,7 +1,7 @@
 import {Hono} from 'hono'
 import {PrismaClient} from './generated/prisma/client.js'
 import {PrismaPg} from '@prisma/adapter-pg'
-// import {serve} from '@hono/node-server'
+import {serve} from '@hono/node-server'
 import 'dotenv/config';
 import bcrypt from "bcryptjs"
 import {sign,decode, verify} from 'hono/jwt'
@@ -18,7 +18,35 @@ const app = new Hono<{
         prisma: PrismaClient
     }
 }>();
+async function authenticate(c:any,next:any){
+    const auth_header = c.req.header("Authorization");
+    const arr = auth_header.split(" ");
+    if(arr.length<2)return c.json({
+                "value" : true
+            });
+    const token = auth_header.split(" ")[1];
 
+    try{
+        
+            const check = await verify(token,process.env.JWT_SECRET!,"HS256");
+
+            if(check){
+                await next();
+            }
+            else{
+                return c.json({
+                "value" : true
+            });
+            }
+
+    }
+    catch(e){
+        return c.json({
+                "value" : true
+            });
+    }
+    
+}
 app.use(
   '*',
   cors({
@@ -35,7 +63,28 @@ app.use('*',async(c,next)=>{
     c.set("prisma",prisma);
     await next()
 })
+app.get('/auth',async(c)=>{
+    const auth_string = c.req.header("Authorization");
+    if(!auth_string){
+        return c.json({"value": false})
+    }
+    try{
+        const arr = auth_string.split(" ");
+        if(arr.length<2){
+             return c.json({"value": false})
+        }
+        const token = arr[1];
 
+        const valid = await verify(token!,process.env.JWT_SECRET!,"HS256")
+
+        if(valid) return c.json({"value":true})
+        else return c.json({"value": false})
+
+    }
+    catch(e){
+        return c.json({"value": false})
+    }
+})
 app.post('/app/v1/signup', async(c)=>{
     const prisma = c.get("prisma");
     
@@ -58,7 +107,7 @@ app.post('/app/v1/signup', async(c)=>{
         }
     })
 
-    const token = await sign(userdata,process.env.JWT_SECRET||"")
+    const token = await sign(userdata,process.env.JWT_SECRET||"","HS256")
     return c.json({
         message:"successfully signed up",
         token: token
@@ -74,7 +123,7 @@ app.post('/app/v1/signup', async(c)=>{
 app.post('/app/v1/signin',async(c)=>{
     const prisma = c.get("prisma")
     const userdata = await c.req.json();
-
+    console.log(userdata);
     const valid = signinschema.safeParse(userdata)
 
     if(!valid.success){
@@ -98,12 +147,13 @@ app.post('/app/v1/signin',async(c)=>{
                 email:result.email,
                 password:result.password
             }
+            console.log(founduser.password,userdata.password);
             const isMatch = await bcrypt.compare(userdata.password,founduser.password);
             if(!isMatch){
                 return c.text("wrong password");
             }
 
-            const token = await sign(userdata,process.env.JWT_SECRET||"")
+            const token = await sign(userdata,process.env.JWT_SECRET||"","HS256")
 
             return c.json({
                 message:"successfully signed in",
@@ -111,13 +161,17 @@ app.post('/app/v1/signin',async(c)=>{
             })
         }
         else{
-            return c.text('unable to sign in ');
+            return c.json({
+                message:"no user with this username"
+            });
         }
     
     }
     catch(e){
         c.status(403)
-        return c.text('some error happened')
+        return c.json({
+                message:"some error"
+            });
     }
 })
 
@@ -168,7 +222,7 @@ app.put('/app/v1/blog',async(c)=>{
     return c.json({message:"error"})
    }
 })
-app.get('/app/v1/blogs',async(c)=>{
+app.get('/app/v1/blogs',authenticate,async(c)=>{
     const prisma = c.get("prisma");
     try{
             const userdata = await prisma.blogs.findMany({});
@@ -182,8 +236,8 @@ app.get('/app/v1/blogs',async(c)=>{
 
     
 })
-// serve({
-//     fetch:app.fetch,
-//     port: 3000
-// })
-export default handle(app)
+serve({
+    fetch:app.fetch,
+    port: 3000
+})
+export default app

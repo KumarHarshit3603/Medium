@@ -1,5 +1,32 @@
 import Signin from '../components/Signin'
+import {useNavigate} from 'react-router-dom'
+import {useEffect} from 'react'
 export default function Signinpage(){
+
+    const navigate = useNavigate();
+    const token = localStorage.getItem('token');
+
+    useEffect(()=>{
+
+            if(token){
+                async function auth_request(){
+                    const res = await fetch(`${import.meta.env.VITE_API_URL}/auth`,{
+                        headers:{
+                            Authorization: `Bearer ${token}` 
+                        }
+                    })
+                    const response = await res.json();
+                    console.log(response.value);
+                    
+                    if(response.value){
+                        navigate("/");
+                    }
+                }
+                auth_request();
+            }
+    },[navigate])
+
+    
     return(
         <>
            <div className = "flex justify-center">

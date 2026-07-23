@@ -662,7 +662,17 @@ var signinschema = z.object({
 });
 
 // src/index.ts
+import { cors } from "hono/cors";
+import "hono/vercel";
 var app = new Hono();
+app.use(
+  "*",
+  cors({
+    origin: (origin) => origin || "*",
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"]
+  })
+);
 app.use("*", async (c, next) => {
   const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL
@@ -702,6 +712,7 @@ app.post("/app/v1/signup", async (c) => {
 app.post("/app/v1/signin", async (c) => {
   const prisma = c.get("prisma");
   const userdata = await c.req.json();
+  console.log(userdata);
   const valid = signinschema.safeParse(userdata);
   if (!valid.success) {
     return c.json(
@@ -716,7 +727,6 @@ app.post("/app/v1/signin", async (c) => {
         username: userdata.username
       }
     });
-    console.log(result);
     if (result) {
       const founduser = {
         name: result.name,
@@ -734,7 +744,9 @@ app.post("/app/v1/signin", async (c) => {
         token
       });
     } else {
-      return c.text("unable to sign in ");
+      return c.json({
+        message: "kuch hua"
+      });
     }
   } catch (e) {
     c.status(403);
