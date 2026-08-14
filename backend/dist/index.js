@@ -801,7 +801,6 @@ app.post("/app/v1/signin", async (c) => {
   }
 });
 app.post("/app/v1/blog", authenticate, async (c) => {
-  console.log("you reached the endpoint");
   const prisma = c.get("prisma");
   const userdata = await c.req.json();
   try {
@@ -847,6 +846,27 @@ app.get("/app/v1/blogs", authenticate, async (c) => {
     return c.json(userdata);
   } catch (e) {
     return c.text("couldnt connect to database");
+  }
+});
+app.get("/app/v1/blog/:id", authenticate, async (c) => {
+  console.log("ran hehe");
+  const prisma = c.get("prisma");
+  const id = c.req.param("id");
+  const blogid = parseInt(id);
+  try {
+    const blogdata = await prisma.blogs.findUnique({
+      where: {
+        id: blogid
+      }
+    });
+    console.log(blogdata);
+    if (blogdata) {
+      return c.json(blogdata);
+    }
+  } catch (e) {
+    c.json({
+      message: "could not find the blog"
+    });
   }
 });
 serve({

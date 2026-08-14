@@ -244,6 +244,7 @@ app.get('/app/v1/blogs',authenticate,async(c)=>{
     
 })
 app.get('/app/v1/blog/:id',authenticate,async(c)=>{
+    console.log("ran hehe")
     const prisma = c.get("prisma");
     const id =c.req.param('id');
     const blogid = parseInt(id);
@@ -253,6 +254,10 @@ app.get('/app/v1/blog/:id',authenticate,async(c)=>{
                 id:blogid
             }
         })
+        // console.log(blogdata);
+        if(blogdata){
+           return c.json(blogdata)
+        }
     }
     catch(e){
         c.json({

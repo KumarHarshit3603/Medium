@@ -54,7 +54,7 @@ export default function Editor(props:any){
             method: "POST",
             headers:{
                 "Content-Type": "application/json",
-                "Authorization": `bearer ${localStorage.getItem('token')}`
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
             },
             body:JSON.stringify({
                 content: strdata,
