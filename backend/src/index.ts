@@ -243,6 +243,23 @@ app.get('/app/v1/blogs',authenticate,async(c)=>{
 
     
 })
+app.get('/app/v1/blog/:id',authenticate,async(c)=>{
+    const prisma = c.get("prisma");
+    const id =c.req.param('id');
+    const blogid = parseInt(id);
+    try{
+        const blogdata = await prisma.blogs.findUnique({
+            where:{
+                id:blogid
+            }
+        })
+    }
+    catch(e){
+        c.json({
+            message:"could not find the blog"
+        })
+    }
+})
 serve({
     fetch:app.fetch,
     port: 3000
