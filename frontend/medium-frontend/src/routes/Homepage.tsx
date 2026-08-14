@@ -1,6 +1,7 @@
-  import {Link} from 'react-router-dom'
+  import {Link,useNavigate} from 'react-router-dom'
   import Stories from '../components/stories'
   export default function Home(){
+    const navigate = useNavigate();
     return(
         <>
             <div  className = "bg-[#f8f6f1] h-screen w-screen">
@@ -13,7 +14,7 @@
                         </div>
                         <div className ="flex justify-between items-center w-100">
                             <button className = "p-5">Explore</button>
-                            <button className = "p-2 bg-black text-white rounded-sm">+ Write </button>
+                            <button className = "p-2 bg-black text-white rounded-sm" onClick = {()=>{navigate('/newblog')}}>+ Write </button>
                             <div className ="px-3">
                                 <button className = "w-10 h-10 bg-[url(/user.png)] bg-cover"></button>
                             </div>

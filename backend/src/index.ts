@@ -179,10 +179,13 @@ app.post('/app/v1/signin',async(c)=>{
     }
 })
 
-app.post('/app/v1/blog',async(c)=>{
+app.post('/app/v1/blog',authenticate,async(c)=>{
+        
         const prisma = c.get("prisma");
         const userdata = await c.req.json();
+
        try{
+        
          const result = await prisma.blogs.create({
             data:{
                 username:userdata.username,

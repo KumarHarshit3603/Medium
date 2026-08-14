@@ -27,6 +27,7 @@ export function Signup(){
             const token = response.token;
 
             localStorage.setItem('token',token);
+            localStorage.setItem('username',Username);
             navigate("/");
             console.log(response);
         }

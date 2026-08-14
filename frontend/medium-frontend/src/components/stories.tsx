@@ -1,7 +1,9 @@
 import {useState , useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import Card from './card'
+import Skeleton from "../components/blogloadingskeleton"
 export default function Stories(){
+    const [loading,setloading] = useState(false);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
@@ -29,11 +31,15 @@ export default function Stories(){
     }
     
     async function getblogs(){
+        setloading(true);
+        
         const res = await fetch(`${import.meta.env.VITE_API_URL}/app/v1/blogs`,{
             headers:{
                             Authorization: `Bearer ${token}` 
                         }
         });
+        
+        setloading(false);
         const blogs = await res.json();
         
         if(blogs.value){
@@ -48,17 +54,34 @@ export default function Stories(){
        
     },[]);
 
+    
     return(
         <>
-            <div className = "ml-100">
+        
+            <div className = "w-1/2">
                 <div className = "p-3 m-5 text-6xl font-bold ">All Stories</div>
                 <div>
                     <input placeholder = "Search by title, author, or topic" className = "m-8 p-2 h-10 w-100 bg-white border border-gray-400"></input>
                 </div>
                 {
+                loading==true?(
+                        <>
+                        <Skeleton/>
+                        <Skeleton/>
+                        <Skeleton/>
+                        <Skeleton/>
+                        <Skeleton/>
+                        <Skeleton/>
+                        </>
+                    
+                ):
+                
+                    (
                     blogs.map((cardobj)=>{
                         return <Card key ={cardobj.id} cardobj = {cardobj} timecalc ={timecalc} getfirstwords = {getfirstwords}/>
                     })
+                    )
+                
                 }
             </div>
         </>

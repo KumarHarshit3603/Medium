@@ -800,7 +800,8 @@ app.post("/app/v1/signin", async (c) => {
     });
   }
 });
-app.post("/app/v1/blog", async (c) => {
+app.post("/app/v1/blog", authenticate, async (c) => {
+  console.log("you reached the endpoint");
   const prisma = c.get("prisma");
   const userdata = await c.req.json();
   try {

@@ -24,6 +24,7 @@ export default function Signin(){
         
         const token = response.token;
         localStorage.setItem('token',token);
+        localStorage.setItem('username',username);
         navigate("/");
         console.log(response);
     }
