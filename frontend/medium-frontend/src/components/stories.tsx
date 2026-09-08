@@ -78,7 +78,7 @@ export default function Stories(){
                 
                     (
                     blogs.map((cardobj)=>{
-                        return <Card key ={cardobj.id} cardobj = {cardobj} timecalc ={timecalc} getfirstwords = {getfirstwords}/>
+                        return <Card key ={cardobj.id} cardobj = {cardobj} timecalc ={timecalc} getfirstwords = {getfirstwords} id ={cardobj.id}/>
                     })
                     )
                 

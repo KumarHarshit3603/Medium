@@ -1,0 +1,19 @@
+#editor {
+    width: 100vw !important;
+    min-height: 100vh !important;
+    background: #f8f6f1 !important;
+}
+
+#editor .codex-editor {
+    width: 100vw !important;
+}
+
+#editor .codex-editor__redactor {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+/* #editor .ce-block__content{
+    margin: 0;
+} */

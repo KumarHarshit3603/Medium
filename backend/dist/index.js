@@ -859,12 +859,15 @@ app.get("/app/v1/blog/:id", authenticate, async (c) => {
         id: blogid
       }
     });
-    console.log(blogdata);
     if (blogdata) {
       return c.json(blogdata);
+    } else {
+      return c.json({
+        message: "could not find the blog"
+      });
     }
   } catch (e) {
-    c.json({
+    return c.json({
       message: "could not find the blog"
     });
   }

@@ -17,7 +17,7 @@ export default function Blog(props:any){
     const editorRef = useRef<EditorJS | null>(null)
 
     useEffect(()=>{
-            if(!blogdata)return;
+            if(!blogdata.content)return;
             console.log(blogdata);
             const editor = new EditorJS({
             holder: 'editor',
@@ -45,7 +45,7 @@ export default function Blog(props:any){
 
     return(
         <>
-            <div id = "editor" className = "m-10"></div>
+            <div id = "editor" ></div>
            
         </>
     )

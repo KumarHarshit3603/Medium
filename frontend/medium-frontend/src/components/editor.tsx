@@ -12,8 +12,9 @@ import Code from '@editorjs/code'
 
 import {useState, useEffect,useRef} from 'react'
 import {useNavigate} from 'react-router-dom'
+import '../App.css'
 export default function Editor(props:any){
-    
+    const [title,settitle] = useState("");
     const navigate = useNavigate();
     const editorRef = useRef<EditorJS | null>(null)
 
@@ -58,7 +59,7 @@ export default function Editor(props:any){
             },
             body:JSON.stringify({
                 content: strdata,
-                title: props.title,
+                title: title,
                 username : localStorage.getItem('username')
             })
         })
@@ -75,8 +76,15 @@ export default function Editor(props:any){
     }
     return(
         <>
-            <div id = "editor" className = "bg-[#f8f6f1]"></div>
-            <button onClick = {()=>{savepost()}}>publish</button>
+            {/* note to myself: css for this editor component is imported from App.css file  */}
+        
+            
+        <div className = "flex bg-[#d9ceb4]  justify-center ">
+            <input placeholder = "title" className = "text-xl w-1/2 bg-gray-200 rounded" onChange = {(e)=>{settitle(e.target.value)}}></input>
+            <button className = "bg-black text-white text-xl p-2 rounded" onClick ={()=>{savepost()}}>publish</button>
+        </div>
+        <div id = "editor" className = "bg-[#f8f6f1]"></div>
+            {/* <button onClick = {()=>{savepost()}}>publish</button> */}
 
         </>
     )

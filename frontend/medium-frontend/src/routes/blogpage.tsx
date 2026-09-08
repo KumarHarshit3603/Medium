@@ -1,7 +1,8 @@
 import {useState,useEffect} from 'react'
+import {useParams} from 'react-router-dom'
 import Blog from '../components/blog'
 export default function Blogpage(){
-    const blogid=5;
+    const blogid=useParams().id;
     const [blogdata,setblogdata] = useState("");
 
         useEffect(()=>{
@@ -11,8 +12,9 @@ export default function Blogpage(){
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 }).then((data)=>data.json()).then((data)=>{setblogdata(data)})
-                
+                if(res===null)console.log("oye nahi hai guru")
             }
+           
             getblogdata();
     },[])
 
@@ -20,9 +22,9 @@ export default function Blogpage(){
     return(
         <>  
             
-            <div className = "m-10">
+            <div >
                 {/*@ts-ignore*/}
-                <div className = "flex justify-center text-4xl font-semibold p-5 m-5">{blogdata.title}</div>
+                <div className = "flex justify-center text-4xl font-semibold p-5 border-b-2">{blogdata.title}</div>
                 <Blog blogdata = {blogdata}/>
             </div>
         </>
