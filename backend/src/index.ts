@@ -231,8 +231,35 @@ app.put('/app/v1/blog',async(c)=>{
 })
 app.get('/app/v1/blogs',authenticate,async(c)=>{
     const prisma = c.get("prisma");
+    const keyword = c.req.query("keyword");
+    console.log(keyword);
     try{
-            const userdata = await prisma.blogs.findMany({});
+            const userdata = await prisma.blogs.findMany({
+                where:keyword?{
+                    OR:[
+                        {
+                            title: {
+                                contains: keyword,
+                                mode:'insensitive'
+                            }
+                        },
+                        {
+                            content:{
+                                contains: keyword,
+                                mode: 'insensitive'
+                            }
+                        },
+                        {
+                            username:{
+                                contains:keyword,
+                                mode: 'insensitive'
+                            }
+                        }
+                    ]
+                }
+                : {}
+                
+            });
             return c.json(userdata);
             
     } 

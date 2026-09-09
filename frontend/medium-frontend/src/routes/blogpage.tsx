@@ -12,7 +12,6 @@ export default function Blogpage(){
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 }).then((data)=>data.json()).then((data)=>{setblogdata(data)})
-                if(res===null)console.log("oye nahi hai guru")
             }
            
             getblogdata();
