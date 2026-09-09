@@ -30,7 +30,7 @@ export default function Signinpage(){
     return(
         <>
            <div className = "flex justify-center">
-                 <div className = "hidden  min-w-md w-1/2 bg-[url(emil-widlund-xrbbXIXAWY0-unsplash.avif)]   bg-cover text-white lg:flex flex-col justify-around p-5">
+                 <div className = "hidden  min-w-md w-1/2 bg-[url(signinpageimage.avif)]   bg-cover text-white lg:flex flex-col justify-around p-5">
                         <div className = "pb-10 font-light">P R O S E </div>
                          <div>
                             <div className ="pt-2 text-white text-6xl font-bold">Where ideas</div>
